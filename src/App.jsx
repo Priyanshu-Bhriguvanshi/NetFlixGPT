@@ -1,6 +1,13 @@
+import { Outlet } from "react-router-dom"
+import {Header} from "./Components"
 function App() {
 
-  return (<h1 className="font-bold text-9xl">Hello Priyanshu Singh</h1>)
+  return (
+    <>
+    <Header/>
+    <Outlet/>
+    </>
+  )
 }
 
 export default App
