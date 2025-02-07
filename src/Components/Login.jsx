@@ -1,52 +1,90 @@
-import { useForm } from 'react-hook-form'
-import {Input} from "./index"
-import authService from '../Appwrite/authUser';
-import { useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import { Input, Button } from "./index";
+import authService from "../Appwrite/authUser";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../Store/UserSlice";
 
-const Login =  () => {
-  const navigate =useNavigate()
-  const { register, handleSubmit, formState: { errors } } = useForm();
+const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   const handleLogin = async (data) => {
-    console.log(data)
+    console.log(data);
     try {
-      const userLogin = await authService.signInUser(data)
-      if(!userLogin)
-      {
-        navigate('/login')
+      const userLogin = await authService.signInUser(data);
+      if (userLogin) {
+        console.log("Login dispatch");
+        dispatch(login(userLogin));
+        navigate("/browse");
       }
-      navigate("/browse")
     } catch (error) {
-      console.error("Error occure when user try to login", error.message)
-      alert("login failed , Please try again")
-      
+      console.error("Error occurred when user tried to login", error.message);
+      alert("Login failed, please try again.");
     }
+  };
 
-  }
   return (
-    <div className='bg-black opacity-80 w-100 h-120 border-1 border-white p-8 '>
-      <h1 className='text-3xl text-white font-bold'>Sign In</h1>
-      <form onSubmit={handleSubmit(handleLogin)}>
-        <Input
-          className="bg-gray-800"
-          type="text"
-          placeholder="enter email here"
-          {...register("email", { required: "Email are required" })}
-        />
-        {errors.email && <p className='text-red-500'>{errors.email.message}</p>}
-        
-        <Input 
-        className="bg-gray-800 " 
-        type="password" 
-        placeholder="enter password" 
-        {...register("password", { required: "Password are required" })} 
-        />
-        <button className='bg-red-600' type='submit'>Login</button>
-      </form>
+    <div className="flex items-center justify-center  bg-black opacity-85">
+      <div className=" border border-gray-500 text-white p-10 rounded-lg w-96">
+        <h1 className="text-3xl font-bold  mb-6">Sign In</h1>
 
-      <p>OR</p>
-      <p>New to Netflix? Sign up now.</p>
+        <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
+          {/* Email Input */}
+          <div>
+            <Input
+              className="w-full bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-red-500"
+              type="email"
+              placeholder="Enter your email"
+              {...register("email", { required: "Email is required" })}
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+            )}
+          </div>
+
+          {/* Password Input */}
+          <div>
+            <Input
+              className="w-full bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-red-500"
+              type="password"
+              placeholder="Enter your password"
+              {...register("password", { required: "Password is required" })}
+            />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+            )}
+          </div>
+
+          {/* Login Button */}
+          <Button
+            name="Login"
+            type="submit"
+            className="w-full bg-red-600 hover:bg-red-700 transition duration-300 font-semibold text-lg py-2"
+          />
+        </form>
+
+        {/* Divider */}
+        <div className="my-6 text-center text-gray-400">OR</div>
+
+        {/* Sign Up Link */}
+        <p className="text-center">
+          New to Netflix?{" "}
+          <span
+            onClick={() => navigate("/signup")}
+            className="text-red-500 cursor-pointer hover:underline"
+          >
+            Sign up now.
+          </span>
+        </p>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

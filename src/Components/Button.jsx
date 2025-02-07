@@ -1,10 +1,16 @@
-import React from 'react'
+import React from 'react';
 
-const Button = ({name, className}) => {
+const Button = ({ name, className = "", type = "button", onClick, ...props }) => {
   return (
-    <div>
-        <button className={`${className}`}  >{name}</button>
-    </div>
-  )
-}
-export default Button
+    <button
+      type={type}
+      onClick={onClick}
+      className={`px-4 py-2 rounded-md text-white transition duration-300 ${className}`}
+      {...props}
+    >
+      {name}
+    </button>
+  );
+};
+
+export default Button;
