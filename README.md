@@ -6,7 +6,7 @@
 
 ## 🔗 Live Demo
 
-👉 [Visit the Live App](net-flix-gpt-neon.vercel.app).  
+👉 [Visit the Live App](https://net-flix-gpt-neon.vercel.app/).  
 
 
 ---
