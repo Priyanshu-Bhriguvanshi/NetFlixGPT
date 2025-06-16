@@ -12,7 +12,7 @@ class UserClass {
 
   async signUpUser({ name, email, password }) {
     try {
-      const userCreate = await this.account.create(ID.unique(), email, name, password);
+      const userCreate = await this.account.create(ID.unique(), email, password, name );
       if (!userCreate) {
         throw new Error("Error occurred when user tried to sign up");
       }
@@ -32,7 +32,7 @@ class UserClass {
       }
       return userLogin; 
     } catch (error) {
-      console.log("Error occurred when user tried to log in: ", error.message);
+      console.error("Error occurred when user tried to log in: ", error.message);
       alert("Login error, please try again");
     }
   }
@@ -41,11 +41,20 @@ class UserClass {
   async signOut() {
     try {
       await this.account.deleteSession('current');
-      console.log("User signed out successfully");
     } catch (error) {
-      console.log("Error occurred when user tried to log out: ", error.message);
+      console.error("Error occurred when user tried to log out: ", error.message);
       alert("Error occurred when user tried to log out");
     }
+  }
+
+  async getCurrentUser(){
+    try {
+      const user = await this.account.get()
+      return user
+    } catch (error) {
+      console.error("Error Occure when fetching user data", error.message)
+    }
+    return null;
   }
 }
 

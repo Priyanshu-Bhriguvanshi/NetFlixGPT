@@ -24,7 +24,7 @@ const SignOutBtn = () => {
   }
   return (
     <div>
-      <Button 
+      <Button className='text-lg font-medium hover:text-red-500 transition cursor-pointer'
       onClick={()=> handleSignOut()}
       name="Sign Out"
       />

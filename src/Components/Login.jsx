@@ -4,10 +4,12 @@ import authService from "../Appwrite/authUser";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../Store/UserSlice";
+import { useState } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [error , setError] = useState()
   const {
     register,
     handleSubmit,
@@ -15,17 +17,18 @@ const Login = () => {
   } = useForm();
 
   const handleLogin = async (data) => {
-    console.log(data);
     try {
-      const userLogin = await authService.signInUser(data);
-      if (userLogin) {
-        console.log("Login dispatch");
-        dispatch(login(userLogin));
-        navigate("/browse");
+      const session = await authService.signInUser(data);
+      if (session) {
+        const userData = await authService.getCurrentUser()
+        if(userData){
+          dispatch(login(userData));
+          navigate("/browse");
+        }
       }
     } catch (error) {
       console.error("Error occurred when user tried to login", error.message);
-      alert("Login failed, please try again.");
+      setError(error.message)
     }
   };
 
